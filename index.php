@@ -2,6 +2,24 @@
 // Hubungkan ke database mp_purple kamu di Laragon
 require_once __DIR__ . '/config/database.php';
 
+// --- LOGIKA KELOLA CAROUSEL BANNER ---
+$query_carousel = "SELECT * FROM carousel ORDER BY id_carousel DESC";
+$result_carousel = mysqli_query($conn, $query_carousel);
+$carousel_images = [];
+
+if ($result_carousel && mysqli_num_rows($result_carousel) > 0) {
+    while ($row = mysqli_fetch_assoc($result_carousel)) {
+        $carousel_images[] = 'assets/img/carousel/' . $row['foto'];
+    }
+} else {
+    // DEFAULT IMAGE: Menggunakan placeholder gambar modern bertema dark abstrak digital jika database kosong
+    $carousel_images = [
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1200&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1618005198143-e5283b019a7f?q=80&w=1200&h=300&fit=crop'
+    ];
+}
+
 // Ambil data produk asli dari database beserta nama tokonya
 $query = "SELECT produk.*, penjual.nama_toko 
           FROM produk 
@@ -31,24 +49,28 @@ $result = mysqli_query($conn, $query);
         /* Override Grid Utama Halaman Index Menjadi Kloning Pencarian 4 Kolom */
         .products-grid {
             display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important; /* Paksa pas 4 kolom kesamping */
-            gap: 20px !important; /* Jarak antar card rapat proporsional */
+            grid-template-columns: repeat(4, 1fr) !important;
+            /* Paksa pas 4 kolom kesamping */
+            gap: 20px !important;
+            /* Jarak antar card rapat proporsional */
             padding: 30px 0 !important;
         }
 
         /* KLONING DESAIN SLEEK CARD DARI PENCARIAN.PHP */
         .sleek-card-index {
-            background: rgba(30, 27, 46, 0.4) !important; /* Warna ungu glassmorphic pencarian */
+            background: rgba(30, 27, 46, 0.4) !important;
+            /* Warna ungu glassmorphic pencarian */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05) !important;
             border-radius: 24px !important;
-            padding: 16px !important; /* Ukuran padding ringkas pencarian */
+            padding: 16px !important;
+            /* Ukuran padding ringkas pencarian */
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
             position: relative !important;
-            opacity: 1 !important; 
+            opacity: 1 !important;
             visibility: visible !important;
             transition: all 0.3s ease;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
@@ -66,7 +88,8 @@ $result = mysqli_query($conn, $query);
         /* Kotak Preview Gambar Kloning Pencarian */
         .sleek-card-index .preview-wrapper {
             width: 100%;
-            height: 150px; /* Ukuran tinggi pas, tidak melar */
+            height: 150px;
+            /* Ukuran tinggi pas, tidak melar */
             border-radius: 16px;
             background-size: cover;
             background-position: center;
@@ -197,13 +220,120 @@ $result = mysqli_query($conn, $query);
 
         /* Responsive Breakpoints Grid */
         @media (max-width: 1100px) {
-            .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
         }
+
         @media (max-width: 800px) {
-            .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
         }
+
         @media (max-width: 500px) {
-            .products-grid { grid-template-columns: repeat(1, 1fr) !important; }
+            .products-grid {
+                grid-template-columns: repeat(1, 1fr) !important;
+            }
+        }
+
+        /* ==========================================================================
+           STYLE CAROUSEL BANNER (Menyesuaikan Tema Ungu Glassmorphic)
+           ========================================================================== */
+        .carousel-box-wrapper {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            /* Ukuran ideal proporsional untuk banner tengah */
+            overflow: hidden;
+            border-radius: 24px;
+            /* Menyamakan lengkungan dengan sleek-card */
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(30, 27, 46, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-slide {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 14px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .carousel-btn:hover {
+            background: #a855f7;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+        }
+
+        .prev-btn {
+            left: 15px;
+        }
+
+        .next-btn {
+            right: 15px;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+
+        .indicator {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active,
+        .indicator:hover {
+            background: #a855f7;
+            transform: scale(1.1);
+            box-shadow: 0 0 8px #a855f7;
+            width: 18px;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -260,30 +390,54 @@ $result = mysqli_query($conn, $query);
     <div class="container">
         <div class="hero-section">
             <h1 class="hero-title">
-                <span class="white">Design inspiration</span><br>
-                <span class="purple-text">websites*</span>
+                <span class="white">Murah & Premium</span><br>
+                <span class="purple-text">Marketplace Digital</span>
             </h1>
-            <p class="hero-subtitle">Platform marketplace asset digital premium untuk menunjang kebutuhan kreatif
-                pembuatan website Anda.</p>
+            <p class="hero-subtitle">Solusi cepat, kualitas terjamin.</p>
         </div>
     </div>
 
+
     <section class="container resources-section">
+
+        <div class="carousel-box-wrapper">
+            <div class="carousel-container">
+                <div class="carousel-slide">
+                    <?php foreach ($carousel_images as $index => $img): ?>
+                        <div class="carousel-item">
+                            <img src="<?php echo $img; ?>" alt="Banner <?php echo $index + 1; ?>">
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <button type="button" class="carousel-btn prev-btn">&#10094;</button>
+                <button type="button" class="carousel-btn next-btn">&#10095;</button>
+
+                <div class="carousel-indicators">
+                    <?php foreach ($carousel_images as $index => $img): ?>
+                        <span class="indicator <?php echo $index === 0 ? 'active' : ''; ?>"
+                            onclick="currentSlide(<?php echo $index; ?>)"></span>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
         <h2 class="section-title">Katalog Produk Kreatif</h2>
 
         <div class="products-grid">
             <?php if (mysqli_num_rows($result) > 0): ?>
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                    
+
                     <div class="sleek-card-index">
                         <div>
-                            <div class="preview-wrapper" style="background-image: url('assets/img/<?php echo !empty($row['foto']) ? $row['foto'] : 'default.jpg'; ?>')">
+                            <div class="preview-wrapper"
+                                style="background-image: url('assets/img/<?php echo !empty($row['foto']) ? $row['foto'] : 'default.jpg'; ?>')">
                                 <div class="floating-price">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                 </div>
                                 <div class="sparkle-badge">✦</div>
                             </div>
-                            
+
                             <div class="card-info">
                                 <div class="seller-tag">
                                     by <span><?php echo htmlspecialchars($row['nama_toko']); ?></span>
@@ -296,11 +450,14 @@ $result = mysqli_query($conn, $query);
                         <div class="action-row">
                             <div class="quantity-counter">
                                 <button type="button" class="count-btn" onclick="ubahAngka(this, -1)">−</button>
-                                <input type="number" class="qty-input" id="qty-<?php echo $row['id_produk']; ?>" value="1" min="1" max="<?php echo $row['stok']; ?>" readonly>
-                                <button type="button" class="count-btn" onclick="ubahAngka(this, 1, <?php echo $row['stok']; ?>)">+</button>
+                                <input type="number" class="qty-input" id="qty-<?php echo $row['id_produk']; ?>" value="1"
+                                    min="1" max="<?php echo $row['stok']; ?>" readonly>
+                                <button type="button" class="count-btn"
+                                    onclick="ubahAngka(this, 1, <?php echo $row['stok']; ?>)">+</button>
                             </div>
-                            
-                            <button class="btn-cart-minimal" onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, '<?php echo htmlspecialchars($row['nama_produk']); ?>', <?php echo $row['harga']; ?>)">
+
+                            <button class="btn-cart-minimal"
+                                onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, '<?php echo htmlspecialchars($row['nama_produk']); ?>', <?php echo $row['harga']; ?>)">
                                 + Cart
                             </button>
                         </div>
@@ -308,13 +465,45 @@ $result = mysqli_query($conn, $query);
 
                 <?php endwhile; ?>
             <?php else: ?>
-                <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Belum ada produk digital yang aktif saat ini.</p>
+                <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Belum ada
+                    produk digital yang aktif saat ini.</p>
             <?php endif; ?>
         </div>
     </section>
 
     <script src="assets/js/main.js"></script>
     <script>
+        // --- LOGIK SLIDER BANNER CAROUSEL ---
+        let currentIndex = 0;
+        const slideContainer = document.querySelector('.carousel-slide');
+        const items = document.querySelectorAll('.carousel-item');
+        const indicators = document.querySelectorAll('.indicator');
+
+        function showSlide(index) {
+            if (index >= items.length) currentIndex = 0;
+            else if (index < 0) currentIndex = items.length - 1;
+            else currentIndex = index;
+
+            const offset = -currentIndex * 100;
+            slideContainer.style.transform = `translateX(${offset}%)`;
+
+            indicators.forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        document.querySelector('.next-btn').addEventListener('click', () => { showSlide(currentIndex + 1); });
+        document.querySelector('.prev-btn').addEventListener('click', () => { showSlide(currentIndex - 1); });
+        function currentSlide(index) { showSlide(index); }
+
+        // Efek Auto-play geser otomatis setiap 5 detik
+        let autoSlide = setInterval(() => { showSlide(currentIndex + 1); }, 5000);
+        document.querySelector('.carousel-container').addEventListener('mouseenter', () => clearInterval(autoSlide));
+        document.querySelector('.carousel-container').addEventListener('mouseleave', () => {
+            autoSlide = setInterval(() => { showSlide(currentIndex + 1); }, 5000);
+        });
+
+        // Kontrol Kuantitas Produk
         function ubahAngka(btn, arah, maxStok) {
             const input = btn.parentElement.querySelector('.qty-input');
             let nilaiSekarang = parseInt(input.value) || 1;
@@ -331,11 +520,12 @@ $result = mysqli_query($conn, $query);
             tambahKeKeranjangDenganQty(id, nama, harga, qty);
         }
 
+        // Animasi GSAP Halus Saat Awal Load Halaman
         document.addEventListener("DOMContentLoaded", () => {
             if (window.gsap) {
                 gsap.from(".hero-title", { duration: 1, y: 40, opacity: 0, ease: "power3.out" });
-                // Animasi GSAP disesuaikan dengan class baru agar mulus dan solid
-                gsap.from(".sleek-card-index", { duration: 0.5, y: 20, opacity: 1, stagger: 0.06, delay: 0.2, ease: "power2.out" });
+                gsap.from(".carousel-box-wrapper", { duration: 0.8, y: -20, opacity: 0, ease: "power3.out", delay: 0.1 });
+                gsap.from(".sleek-card-index", { duration: 0.5, y: 20, opacity: 1, stagger: 0.06, delay: 0.3, ease: "power2.out" });
             }
         });
     </script>
