@@ -10,16 +10,27 @@ if (isset($_POST['login'])) {
     $query = "SELECT * FROM admin WHERE username='$username'";
     $result = mysqli_query($conn, $query);
 
-    if (mysqli_num_rows($result) === 1) {
-        $row = mysqli_fetch_assoc($result);
-        // Mendukung password_verify maupun plain-text untuk kemudahan development
-        if (password_verify($password, $row['password']) || $password === $row['password']) {
-            $_SESSION['admin'] = $row['username'];
-            header("Location: dashboard.php");
-            exit;
+    // Diubah menjadi '> 0' agar jika ada baris ganda di database tidak langsung error
+    if ($result && mysqli_num_rows($result) > 0) {
+        $login_sukses = false;
+        
+        // Melakukan perulangan untuk memeriksa kecocokan password pada baris yang tersedia
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Mendukung password_verify maupun plain-text untuk kemudahan development
+            if (password_verify($password, $row['password']) || $password === $row['password']) {
+                $_SESSION['admin'] = $row['username'];
+                $login_sukses = true;
+                header("Location: dashboard.php");
+                exit;
+            }
         }
+        
+        if (!$login_sukses) {
+            $error = true;
+        }
+    } else {
+        $error = true;
     }
-    $error = true;
 }
 ?>
 <!DOCTYPE html>
