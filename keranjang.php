@@ -13,6 +13,7 @@
     <div class="purple-bokeh"></div>
 
     <header>
+        
         <div class="container navbar-container">
             <div class="logo" onclick="window.location.href='index.php'">
                 <span class="white">Market</span><span class="purple">Inspired</span>
@@ -83,6 +84,9 @@
                 html += `
                     <div class="resource-card" style="flex-direction: row; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 20px;">
                         <div style="max-width: 50%;">
+                            <div class="floating-price">
+                                <img src="assets/img/coin.png" alt="coin" class="money-icon">
+                            </div>
                             <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 4px;">${item.nama}</h3>
                             <span class="price" style="font-size: 14px; color: var(--text-muted);">${formatRupiah(item.harga)}</span>
                         </div>

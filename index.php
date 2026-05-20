@@ -34,7 +34,7 @@ $result = mysqli_query($conn, $query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspired Market - Marketplace</title>
+    <title>Hamba Market</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
@@ -44,6 +44,14 @@ $result = mysqli_query($conn, $query);
         body {
             background-color: #0b0b0c !important;
             color: #ffffff !important;
+        }
+
+        /* Style Tambahan Untuk Ikon Koin */
+        .money-icon {
+            width: 14px; 
+            height: 14px; 
+            vertical-align: middle; 
+            margin-right: 4px;
         }
 
         /* Override Grid Utama Halaman Index Menjadi Kloning Pencarian 4 Kolom */
@@ -99,7 +107,7 @@ $result = mysqli_query($conn, $query);
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Badge Harga Mengambang Di Atas Gambar */
+        /* Badge Harga Mengambang Di Atas Gambar dengan Flexbox */
         .sleek-card-index .floating-price {
             position: absolute;
             left: 12px;
@@ -107,11 +115,13 @@ $result = mysqli_query($conn, $query);
             background: #0b0b0c !important;
             border: 1px solid rgba(255, 255, 255, 0.15) !important;
             color: #ffffff !important;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 10px;
             font-size: 13px;
             font-weight: 700;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            display: inline-flex;
+            align-items: center;
         }
 
         /* Sparkle Badge */
@@ -346,7 +356,7 @@ $result = mysqli_query($conn, $query);
     <header>
         <div class="container navbar-container">
             <div class="logo" onclick="window.location.href='index.php'">
-                <span class="white">Market</span><span class="purple">Inspired</span>
+                <span class="white">Hamba</span><span class="purple">Market</span>
             </div>
 
             <form action="pencarian.php" method="GET" class="search-box">
@@ -433,6 +443,7 @@ $result = mysqli_query($conn, $query);
                             <div class="preview-wrapper"
                                 style="background-image: url('assets/img/<?php echo !empty($row['foto']) ? $row['foto'] : 'default.jpg'; ?>')">
                                 <div class="floating-price">
+                                    <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
                                 </div>
                                 <div class="sparkle-badge">✦</div>
@@ -457,7 +468,7 @@ $result = mysqli_query($conn, $query);
                             </div>
 
                             <button class="btn-cart-minimal"
-                                onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, '<?php echo htmlspecialchars($row['nama_produk']); ?>', <?php echo $row['harga']; ?>)">
+                                onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>', <?php echo $row['harga']; ?>)">
                                 + Cart
                             </button>
                         </div>
@@ -518,6 +529,25 @@ $result = mysqli_query($conn, $query);
         function prosesKeranjang(id, nama, harga) {
             const qty = parseInt(document.getElementById('qty-' + id).value) || 1;
             tambahKeKeranjangDenganQty(id, nama, harga, qty);
+        }
+
+        // Modifikasi Tambahan: Fungsi Handler LocalStorage untuk sync ke keranjang.php
+        function tambahKeKeranjangDenganQty(id, nama, harga, qty) {
+            let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
+            let itemIndex = keranjang.findIndex(item => item.nama === nama);
+
+            if (itemIndex > -1) {
+                keranjang[itemIndex].jumlah += qty;
+            } else {
+                keranjang.push({
+                    nama: nama,
+                    harga: harga,
+                    jumlah: qty
+                });
+            }
+
+            localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
+            alert(`🎉 Berhasil memasukkan ${qty} pcs "${nama}" ke keranjang belanja!`);
         }
 
         // Animasi GSAP Halus Saat Awal Load Halaman
