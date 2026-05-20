@@ -15,8 +15,7 @@ if ($result_carousel && mysqli_num_rows($result_carousel) > 0) {
     // DEFAULT IMAGE: Menggunakan placeholder gambar modern bertema dark abstrak digital jika database kosong
     $carousel_images = [
         'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1200&h=300&fit=crop',
-        'https://images.unsplash.com/photo-1618005198143-e5283b019a7f?q=80&w=1200&h=300&fit=crop'
+        'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1200&h=300&fit=crop'
     ];
 }
 
@@ -54,26 +53,35 @@ $result = mysqli_query($conn, $query);
             margin-right: 4px;
         }
 
+        /* Style Kursor untuk Efek Mengetik */
+        .typing-cursor {
+            color: #a855f7;
+            font-weight: bold;
+            animation: blinkCursor 0.8s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         /* Override Grid Utama Halaman Index Menjadi Kloning Pencarian 4 Kolom */
         .products-grid {
             display: grid !important;
             grid-template-columns: repeat(4, 1fr) !important;
-            /* Paksa pas 4 kolom kesamping */
             gap: 20px !important;
-            /* Jarak antar card rapat proporsional */
             padding: 30px 0 !important;
         }
 
         /* KLONING DESAIN SLEEK CARD DARI PENCARIAN.PHP */
         .sleek-card-index {
             background: rgba(30, 27, 46, 0.4) !important;
-            /* Warna ungu glassmorphic pencarian */
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.05) !important;
             border-radius: 24px !important;
             padding: 16px !important;
-            /* Ukuran padding ringkas pencarian */
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
@@ -97,7 +105,6 @@ $result = mysqli_query($conn, $query);
         .sleek-card-index .preview-wrapper {
             width: 100%;
             height: 150px;
-            /* Ukuran tinggi pas, tidak melar */
             border-radius: 16px;
             background-size: cover;
             background-position: center;
@@ -230,25 +237,19 @@ $result = mysqli_query($conn, $query);
 
         /* Responsive Breakpoints Grid */
         @media (max-width: 1100px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
+            .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
         }
 
         @media (max-width: 800px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
+            .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         @media (max-width: 500px) {
-            .products-grid {
-                grid-template-columns: repeat(1, 1fr) !important;
-            }
+            .products-grid { grid-template-columns: repeat(1, 1fr) !important; }
         }
 
         /* ==========================================================================
-           STYLE CAROUSEL BANNER (Menyesuaikan Tema Ungu Glassmorphic)
+           STYLE CAROUSEL BANNER
            ========================================================================== */
         .carousel-box-wrapper {
             width: 100%;
@@ -261,10 +262,8 @@ $result = mysqli_query($conn, $query);
             position: relative;
             width: 100%;
             height: 260px;
-            /* Ukuran ideal proporsional untuk banner tengah */
             overflow: hidden;
             border-radius: 24px;
-            /* Menyamakan lengkungan dengan sleek-card */
             border: 1px solid rgba(255, 255, 255, 0.05);
             background: rgba(30, 27, 46, 0.2);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
@@ -310,13 +309,8 @@ $result = mysqli_query($conn, $query);
             box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
         }
 
-        .prev-btn {
-            left: 15px;
-        }
-
-        .next-btn {
-            right: 15px;
-        }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
 
         .carousel-indicators {
             position: absolute;
@@ -399,9 +393,9 @@ $result = mysqli_query($conn, $query);
 
     <div class="container">
         <div class="hero-section">
-            <h1 class="hero-title">
+            <h1 class="hero-title" style="min-height: 90px;">
                 <span class="white">Murah & Premium</span><br>
-                <span class="purple-text">Marketplace Digital</span>
+                <span class="purple-text" id="typing-text"></span><span class="typing-cursor">|</span>
             </h1>
             <p class="hero-subtitle">Solusi cepat, kualitas terjamin.</p>
         </div>
@@ -507,7 +501,6 @@ $result = mysqli_query($conn, $query);
         document.querySelector('.prev-btn').addEventListener('click', () => { showSlide(currentIndex - 1); });
         function currentSlide(index) { showSlide(index); }
 
-        // Efek Auto-play geser otomatis setiap 5 detik
         let autoSlide = setInterval(() => { showSlide(currentIndex + 1); }, 5000);
         document.querySelector('.carousel-container').addEventListener('mouseenter', () => clearInterval(autoSlide));
         document.querySelector('.carousel-container').addEventListener('mouseleave', () => {
@@ -531,7 +524,6 @@ $result = mysqli_query($conn, $query);
             tambahKeKeranjangDenganQty(id, nama, harga, qty);
         }
 
-        // Modifikasi Tambahan: Fungsi Handler LocalStorage untuk sync ke keranjang.php
         function tambahKeKeranjangDenganQty(id, nama, harga, qty) {
             let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
             let itemIndex = keranjang.findIndex(item => item.nama === nama);
@@ -539,24 +531,63 @@ $result = mysqli_query($conn, $query);
             if (itemIndex > -1) {
                 keranjang[itemIndex].jumlah += qty;
             } else {
-                keranjang.push({
-                    nama: nama,
-                    harga: harga,
-                    jumlah: qty
-                });
+                keranjang.push({ nama: nama, harga: harga, jumlah: qty });
             }
 
             localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
             alert(`🎉 Berhasil memasukkan ${qty} pcs "${nama}" ke keranjang belanja!`);
         }
 
-        // Animasi GSAP Halus Saat Awal Load Halaman
+        // ==========================================================================
+        // FITUR BARU: LOGIKA TYPEWRITER EFFECT (EFEK MENGETIK PERGANTIAN KATA)
+        // ==========================================================================
+        const kataKata = ["Marketplace Digital", "UI Kit Terbaik", "Template Premium", "Source Code Bersih"];
+        let indeksKata = 0;
+        let indeksKarakter = 0;
+        let sedangMenghapus = false;
+        const targetElement = document.getElementById("typing-text");
+
+        function jalankanEfekKetik() {
+            const kataSaatIni = kataKata[indeksKata];
+            
+            if (sedangMenghapus) {
+                targetElement.textContent = kataSaatIni.substring(0, indeksKarakter - 1);
+                indeksKarakter--;
+            } else {
+                targetElement.textContent = kataSaatIni.substring(0, indeksKarakter + 1);
+                indeksKarakter++;
+            }
+
+            let kecepatan = 100; // Kecepatan mengetik dasar (milidetik)
+
+            if (sedangMenghapus) {
+                kecepatan /= 2; // Menghapus kata 2x lebih cepat
+            }
+
+            // Jika kata sudah selesai diketik sepenuhnya
+            if (!sedangMenghapus && indeksKarakter === kataSaatIni.length) {
+                kecepatan = 2000; // Berhenti selama 2 detik agar bisa dibaca pengguna
+                sedangMenghapus = true;
+            } 
+            // Jika kata sudah terhapus habis total
+            else if (sedangMenghapus && indeksKarakter === 0) {
+                sedangMenghapus = false;
+                indeksKata = (indeksKata + 1) % kataKata.length; // Ganti ke variasi kata berikutnya
+                kecepatan = 400; // Jeda singkat sebelum mulai mengetik kata baru
+            }
+
+            setTimeout(jalankanEfekKetik, kecepatan);
+        }
+
+        // Animasi GSAP Standar Saat Halaman Pertama Kali Dibuka
         document.addEventListener("DOMContentLoaded", () => {
             if (window.gsap) {
-                gsap.from(".hero-title", { duration: 1, y: 40, opacity: 0, ease: "power3.out" });
                 gsap.from(".carousel-box-wrapper", { duration: 0.8, y: -20, opacity: 0, ease: "power3.out", delay: 0.1 });
                 gsap.from(".sleek-card-index", { duration: 0.5, y: 20, opacity: 1, stagger: 0.06, delay: 0.3, ease: "power2.out" });
             }
+            
+            // Jalankan efek mengetik setelah halaman termuat sempurna
+            setTimeout(jalankanEfekKetik, 500);
         });
     </script>
 </body>
