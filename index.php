@@ -89,11 +89,23 @@ $result = mysqli_query($conn, $query);
 
     <div class="container">
         <div class="hero-section">
-            <h1 class="hero-title" style="min-height: 90px;">
-                <span class="white">Murah & Premium</span><br>
-                <span class="purple-text" id="typing-text"></span><span class="typing-cursor">|</span>
-            </h1>
-            <p class="hero-subtitle">Solusi cepat, kualitas terjamin.</p>
+            <div class="hero-section-title">
+                <div class="div-hero-section">
+                    <img src="assets/img/icon-genshin.png" alt="Icon Game" class="active">
+                    <img src="assets/img/icon-valorant.png" alt="Icon Game">
+                    <img src="assets/img/icon-pubg.png" alt="Icon Game">
+                    <img src="assets/img/icon-cs.png" alt="Icon Game">
+                </div>
+
+                <div>
+                    <h1 class="hero-title" style="min-height: 90px;">
+                        <span class="white">Murah & Premium</span><br>
+                        <span class="purple-text" id="typing-text"></span><span class="typing-cursor">|</span>
+                    </h1>
+                    <p class="hero-subtitle">Solusi cepat, kualitas terjamin.</p>
+                </div>
+
+            </div>
         </div>
     </div>
 
@@ -245,7 +257,7 @@ $result = mysqli_query($conn, $query);
 
         function jalankanEfekKetik() {
             const kataSaatIni = kataKata[indeksKata];
-            
+
             if (sedangMenghapus) {
                 targetElement.textContent = kataSaatIni.substring(0, indeksKarakter - 1);
                 indeksKarakter--;
@@ -264,7 +276,7 @@ $result = mysqli_query($conn, $query);
             if (!sedangMenghapus && indeksKarakter === kataSaatIni.length) {
                 kecepatan = 2000; // Berhenti selama 2 detik agar bisa dibaca pengguna
                 sedangMenghapus = true;
-            } 
+            }
             // Jika kata sudah terhapus habis total
             else if (sedangMenghapus && indeksKarakter === 0) {
                 sedangMenghapus = false;
@@ -281,11 +293,12 @@ $result = mysqli_query($conn, $query);
                 gsap.from(".carousel-box-wrapper", { duration: 0.8, y: -20, opacity: 0, ease: "power3.out", delay: 0.1 });
                 gsap.from(".sleek-card-index", { duration: 0.5, y: 20, opacity: 1, stagger: 0.06, delay: 0.3, ease: "power2.out" });
             }
-            
+
             // Jalankan efek mengetik setelah halaman termuat sempurna
             setTimeout(jalankanEfekKetik, 500);
         });
     </script>
+    <script src="assets/js/animasi-ikon.js"></script>
 </body>
 
 </html>
