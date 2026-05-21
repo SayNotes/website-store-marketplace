@@ -88,7 +88,7 @@ $result = mysqli_query($conn, $query);
 
                     <div class="sleek-card">
                         <div>
-                            <div class="preview-wrapper" style="background-image: url('<?php echo $image_url; ?>')">
+                            <div class="preview-wrapper" style="<?php echo $bgStyle; ?>">
                                 <div class="floating-price">
                                     <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
