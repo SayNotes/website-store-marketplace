@@ -19,12 +19,24 @@ if ($result_carousel && mysqli_num_rows($result_carousel) > 0) {
     ];
 }
 
-// Ambil data produk asli dari database beserta nama tokonya
+// --- AMBIL DATA KATEGORI ---
+$query_kategori = "SELECT * FROM kategori ORDER BY nama_kategori ASC"; // Sesuaikan nama tabel & kolom jika berbeda
+$result_kategori = mysqli_query($conn, $query_kategori);
+
+// --- LOGIKA FILTER KATEGORI & AMBIL DATA PRODUK ---
+$kategori_terpilih = isset($_GET['kategori']) ? mysqli_real_escape_string($conn, $_GET['kategori']) : '';
+
 $query = "SELECT produk.*, penjual.nama_toko 
           FROM produk 
           JOIN penjual ON produk.id_penjual = penjual.id_penjual 
-          WHERE penjual.status = 'aktif' AND produk.stok > 0
-          ORDER BY produk.id_produk DESC";
+          WHERE penjual.status = 'aktif' AND produk.stok > 0";
+
+// Jika user memilih kategori tertentu, tambahkan kondisi WHERE
+if (!empty($kategori_terpilih)) {
+    $query .= " AND produk.id_kategori = '$kategori_terpilih'"; // Sesuaikan nama kolom foreign key di tabel produk
+}
+
+$query .= " ORDER BY produk.id_produk DESC";
 $result = mysqli_query($conn, $query);
 ?>
 <!DOCTYPE html>
@@ -34,8 +46,10 @@ $result = mysqli_query($conn, $query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hamba Market</title>
+    <link rel="stylesheet" href="assets/css/category-style.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
 </head>
 
 <body>
@@ -134,16 +148,58 @@ $result = mysqli_query($conn, $query);
             </div>
         </div>
 
-        <h2 class="section-title">Katalog Produk Kreatif</h2>
+        <h2 class="section-title">Katalog Produk</h2>
 
+        <div class="category-container"
+            style="display: flex !important; gap: 12px !important; overflow-x: auto !important; padding: 15px 0 25px 0 !important; scrollbar-width: none !important;">
+
+            <!-- Tombol Semua -->
+            <a href="index.php" class="category-badge <?php echo empty($kategori_terpilih) ? 'active' : ''; ?>" style="
+              <?php if (empty($kategori_terpilih)): ?>
+                  'active'
+              <?php else: ?>
+                    ''
+              <?php endif; ?>">
+                Semua
+            </a>
+
+            <!-- Looping Kategori dari Database -->
+            <?php if ($result_kategori && mysqli_num_rows($result_kategori) > 0): ?>
+                <?php while ($kat = mysqli_fetch_assoc($result_kategori)):
+                    $is_active = ($kategori_terpilih == $kat['id_kategori']);
+                    ?>
+                    <a href="index.php?kategori=<?php echo $kat['id_kategori']; ?>"
+                        class="category-badge <?php echo $is_active ? 'active' : ''; ?>" style="
+                      <?php if ($is_active): ?>
+                          'active'
+                      <?php else: ?>
+                          ''
+                      <?php endif; ?>">
+                        <?php echo htmlspecialchars($kat['nama_kategori']); ?>
+                    </a>
+                <?php endwhile; ?>
+            <?php endif; ?>
+
+        </div>
         <div class="products-grid">
             <?php if (mysqli_num_rows($result) > 0): ?>
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
 
+                    <?php
+                    $foto = $row['foto'];
+
+                    if (empty($foto)) {
+                        preg_match('/\[(.*?)\]/', $row['nama_produk'], $matches);
+                        $text = !empty($matches[1]) ? urlencode($matches[1]) : 'Product';
+                        $image_url = "https://placehold.co/400x400/120626/E0AAFF?font=montserrat&text=" . $text;
+                    } else {
+                        $image_url = (strpos($foto, 'http://') === 0 || strpos($foto, 'https://') === 0) ? $foto : 'assets/img/' . $foto;
+                    }
+                    ?>
+
                     <div class="sleek-card-index">
                         <div>
-                            <div class="preview-wrapper"
-                                style="background-image: url('assets/img/<?php echo !empty($row['foto']) ? $row['foto'] : 'default.jpg'; ?>')">
+                            <div class="preview-wrapper" style="background-image: url('<?php echo $image_url; ?>')">
                                 <div class="floating-price">
                                     <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
@@ -179,7 +235,7 @@ $result = mysqli_query($conn, $query);
                 <?php endwhile; ?>
             <?php else: ?>
                 <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Belum ada
-                    produk digital yang aktif saat ini.</p>
+                    produk digital yang aktif di kategori ini.</p>
             <?php endif; ?>
         </div>
     </section>
@@ -246,9 +302,7 @@ $result = mysqli_query($conn, $query);
             alert(`🎉 Berhasil memasukkan ${qty} pcs "${nama}" ke keranjang belanja!`);
         }
 
-        // ==========================================================================
-        // FITUR BARU: LOGIKA TYPEWRITER EFFECT (EFEK MENGETIK PERGANTIAN KATA)
-        // ==========================================================================
+        // --- TYPEWRITER EFFECT ---
         const kataKata = ["Marketplace Digital", "UI Kit Terbaik", "Template Premium", "Source Code Bersih"];
         let indeksKata = 0;
         let indeksKarakter = 0;
@@ -266,22 +320,20 @@ $result = mysqli_query($conn, $query);
                 indeksKarakter++;
             }
 
-            let kecepatan = 100; // Kecepatan mengetik dasar (milidetik)
+            let kecepatan = 100;
 
             if (sedangMenghapus) {
-                kecepatan /= 2; // Menghapus kata 2x lebih cepat
+                kecepatan /= 2;
             }
 
-            // Jika kata sudah selesai diketik sepenuhnya
             if (!sedangMenghapus && indeksKarakter === kataSaatIni.length) {
-                kecepatan = 2000; // Berhenti selama 2 detik agar bisa dibaca pengguna
+                kecepatan = 2000;
                 sedangMenghapus = true;
             }
-            // Jika kata sudah terhapus habis total
             else if (sedangMenghapus && indeksKarakter === 0) {
                 sedangMenghapus = false;
-                indeksKata = (indeksKata + 1) % kataKata.length; // Ganti ke variasi kata berikutnya
-                kecepatan = 400; // Jeda singkat sebelum mulai mengetik kata baru
+                indeksKata = (indeksKata + 1) % kataKata.length;
+                kecepatan = 400;
             }
 
             setTimeout(jalankanEfekKetik, kecepatan);
@@ -294,7 +346,6 @@ $result = mysqli_query($conn, $query);
                 gsap.from(".sleek-card-index", { duration: 0.5, y: 20, opacity: 1, stagger: 0.06, delay: 0.3, ease: "power2.out" });
             }
 
-            // Jalankan efek mengetik setelah halaman termuat sempurna
             setTimeout(jalankanEfekKetik, 500);
         });
     </script>

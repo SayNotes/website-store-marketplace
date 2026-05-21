@@ -74,10 +74,21 @@ $result = mysqli_query($conn, $query);
                                    ? "background-image: url('{$pathFoto}');"
                                    : "";
                     ?>
+                    <?php
+                    $foto = $row['foto'];
+
+                    if (empty($foto)) {
+                        preg_match('/\[(.*?)\]/', $row['nama_produk'], $matches);
+                        $text = !empty($matches[1]) ? urlencode($matches[1]) : 'Product';
+                        $image_url = "https://placehold.co/400x400/120626/E0AAFF?font=montserrat&text=" . $text;
+                    } else {
+                        $image_url = (strpos($foto, 'http://') === 0 || strpos($foto, 'https://') === 0) ? $foto : 'assets/img/' . $foto;
+                    }
+                    ?>
 
                     <div class="sleek-card">
                         <div>
-                            <div class="preview-wrapper" style="<?php echo $bgStyle; ?>">
+                            <div class="preview-wrapper" style="background-image: url('<?php echo $image_url; ?>')">
                                 <div class="floating-price">
                                     <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>

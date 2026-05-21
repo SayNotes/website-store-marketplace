@@ -1,0 +1,41 @@
+.category-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 15px 0 25px 0;
+  scrollbar-width: none;
+}
+
+.category-container::-webkit-scrollbar {
+  display: none;
+}
+
+.category-badge {
+  padding: 10px 20px;
+  /* MENGGUNAKAN WARNA PEKAT/SOLID (TIDAK TRANSPARAN) */
+  background-color: var(--card-bg);
+  /* Ungu super gelap pekat (Navy-Purple Solid) */
+  color: #e2e8f0;
+
+  /* Border solid tebal */
+  border-radius: 30px;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 0.9rem;
+  font-weight: 600;
+  /* Tebalkan teks agar makin terbaca */
+  transition: all 0.3s ease;
+}
+
+/* KETIKA DI-HOVER ATAU AKTIF */
+.category-badge:hover,
+.category-badge.active {
+  background-color: var(--purple-primary);
+  /* Warna ungu solid cerah */
+  color: var(--bg-dark);
+  /* Teks putih bersih */
+  border-color: var(--purple-primary);
+  /* Border ungu muda */
+  /* Efek cahaya neon */
+  transform: translateY(-2px);
+}
