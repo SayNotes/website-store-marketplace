@@ -64,51 +64,15 @@
 
 <div align="center">
 
-```
-╔══════════════════════════════════════════════════════════════════════╗
-║                     🌟  PLATFORM FEATURES  🌟                       ║
-╠══════════════════════════════════════════════════════════════════════╣
-║  🔐  Seller Auth        │  Secure login + full CRUD on products      ║
-║  🛡️  Admin Panel        │  Monitor & manage seller accounts          ║
-║  🔍  Smart Search       │  Find by product name or seller instantly  ║
-║  🛒  Shopping Cart      │  Add, review, and checkout items           ║
-║  📋  Transaction Log    │  Full history for buyers & sellers         ║
-║  🔑  Role-Based Auth    │  3-tier access: Admin · Seller · Buyer     ║
-╚══════════════════════════════════════════════════════════════════════╝
-```
+| Icon | Feature | Description |
+|:----:|:--------|:------------|
+| 🔐 | **Seller Auth & Product Management** | Secure login for sellers with full Create, Read, Update, Delete access to their products |
+| 🛡️ | **Admin Control Panel** | Monitor all registered sellers and toggle account status between active and suspended |
+| 🔍 | **Smart Product Search** | Search across the entire marketplace by product name or seller name — fast and intuitive |
+| 🛒 | **Shopping Cart** | Add items to cart, review selections, and proceed to a smooth checkout experience |
+| 📋 | **Transaction History** | Complete log of past orders and transaction details accessible by both buyers and sellers |
+| 🔑 | **Role-Based Authentication** | Secure session-based authentication with 3 distinct tiers: Admin · Seller · Buyer |
 
-</div>
-
-<br/>
-
-<div align="center">
-<table>
-  <tr>
-    <th width="33%">👤 Buyer Experience</th>
-    <th width="33%">🏪 Seller Tools</th>
-    <th width="33%">🛡️ Admin Power</th>
-  </tr>
-  <tr>
-    <td>
-      🔍 Search products<br/>
-      🛒 Manage cart<br/>
-      💳 Checkout smoothly<br/>
-      📋 View transaction history
-    </td>
-    <td>
-      ➕ Add new products<br/>
-      ✏️ Edit product details<br/>
-      🗑️ Delete listings<br/>
-      📦 View incoming orders
-    </td>
-    <td>
-      👁️ Monitor all sellers<br/>
-      ✅ Activate accounts<br/>
-      🚫 Suspend accounts<br/>
-      📊 Oversee platform
-    </td>
-  </tr>
-</table>
 </div>
 
 <br/>
@@ -315,9 +279,9 @@ It motivates and helps others discover this project!
 [![GitHub stars](https://img.shields.io/github/stars/your-username/website-store-marketplace?style=social)](https://github.com/your-username/website-store-marketplace)
 [![GitHub forks](https://img.shields.io/github/forks/your-username/website-store-marketplace?style=social)](https://github.com/your-username/website-store-marketplace/fork)
 
-<!-- <br/> -->
+<br/>
 
-<!-- Made with ❤️ &nbsp;by &nbsp;**[Your Name](https://github.com/your-username)** -->
+Made with ❤️ &nbsp;by &nbsp;**[Your Name](https://github.com/your-username)**
 
 <br/>
 
