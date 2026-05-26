@@ -1,147 +1,148 @@
-# 🛒 Website Store Marketplace\
+<div align="center">
 
-## 📌 Overview
-The Website Store Marketplace is a web-based platform developed to facilitate online buying and selling activities. It provides sellers with the ability to establish stores, manage product inventories, and process customer orders. At the same time, buyers can conveniently browse, compare, and purchase products through an integrated system.
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=32&duration=3000&pause=1000&color=6C63FF&center=true&vCenter=true&width=600&lines=🛒+Website+Store+Marketplace;Buy+%26+Sell+Made+Simple" alt="Typing SVG" />
 
-## 🚀 Key Features
-- Penjual Login untuk CRUD produknya
-- Admin login untuk mengawasi penjual mengatur aktif atau menangguhkan
-- seraching untuk mencari produk berdasarkan penjual atau nama produk yang di jual 
-- keranjang untuk menampung barang yang dibeli
-- autentikasi
+<br/>
 
-## 🛠️ Technology Stack
-- **Frontend**: HTML, CSS, JavaScript
-- **Backend**: PHP
-- **Database**: MySQL
-- **Version Control**: Git & GitHub
-# 🛒 Website Store Marketplace
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" />
+<p>
+  <img src="https://img.shields.io/badge/Status-Active-4CAF50?style=for-the-badge&logo=checkmarx&logoColor=white" />
+  <img src="https://img.shields.io/badge/Version-1.0.0-6C63FF?style=for-the-badge&logo=git&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-FF6B6B?style=for-the-badge&logo=opensourceinitiative&logoColor=white" />
+  <img src="https://img.shields.io/badge/PRs-Welcome-00BCD4?style=for-the-badge&logo=github&logoColor=white" />
 </p>
 
-<p align="center">
-  A web-based marketplace platform that empowers sellers to manage their stores and enables buyers to browse and purchase products seamlessly.
-</p>
+<p><em>A modern web-based marketplace platform that empowers sellers to build their stores<br/>and enables buyers to discover and purchase products — all in one place.</em></p>
+
+<a href="#-overview">Overview</a> •
+<a href="#-key-features">Features</a> •
+<a href="#-tech-stack">Tech Stack</a> •
+<a href="#-installation">Installation</a> •
+<a href="#-user-roles">User Roles</a>
 
 ---
+
+</div>
 
 ## 📌 Overview
 
-**Website Store Marketplace** is a full-featured web platform designed to facilitate online buying and selling activities. Sellers can establish their own stores, manage product inventories, and process customer orders — while buyers can conveniently browse, compare, and purchase products through a unified, integrated system.
+**Website Store Marketplace** is a full-featured e-commerce web platform built with simplicity and scalability in mind. Sellers can register, set up their store, and manage their entire product catalog — while buyers enjoy a smooth shopping experience with real-time search and an intuitive cart system. An Admin layer keeps the platform safe and well-managed.
 
 ---
 
-## 🚀 Key Features
+## ✨ Key Features
 
-| Feature | Description |
-|---|---|
-| 🔐 **Seller Authentication** | Secure login for sellers to create, read, update, and delete their own products |
-| 🛡️ **Admin Dashboard** | Admin panel to monitor sellers and manage account status (active / suspended) |
-| 🔍 **Product Search** | Search products by seller name or product name in real-time |
-| 🛒 **Shopping Cart** | Add products to cart and manage purchases before checkout |
-| 🔑 **User Authentication** | Role-based authentication system for Admin, Seller, and Buyer |
+<table>
+  <tr>
+    <td width="50px" align="center">🔐</td>
+    <td><strong>Seller Login & Product Management</strong><br/>Sellers can securely log in and perform full CRUD operations on their products.</td>
+  </tr>
+  <tr>
+    <td align="center">🛡️</td>
+    <td><strong>Admin Control Panel</strong><br/>Admins can monitor all sellers and toggle account status between active and suspended.</td>
+  </tr>
+  <tr>
+    <td align="center">🔍</td>
+    <td><strong>Smart Product Search</strong><br/>Search across the marketplace by product name or seller — fast and intuitive.</td>
+  </tr>
+  <tr>
+    <td align="center">🛒</td>
+    <td><strong>Shopping Cart</strong><br/>Buyers can add items to cart, review selections, and proceed to checkout smoothly.</td>
+  </tr>
+  <tr>
+    <td align="center">🔑</td>
+    <td><strong>Role-Based Authentication</strong><br/>Secure, session-based authentication for Admin, Seller, and Buyer roles.</td>
+  </tr>
+</table>
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-<p align="left">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
-  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" />
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
-  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" />
-</p>
+<div align="center">
 
 | Layer | Technology |
-|---|---|
-| **Frontend** | HTML5, CSS3, JavaScript |
-| **Backend** | PHP |
-| **Database** | MySQL |
-| **Version Control** | Git & GitHub |
+|:---:|:---:|
+| **Frontend** | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) |
+| **Backend** | ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white) |
+| **Database** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white) |
+| **Version Control** | ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white) |
+| **Local Server** | ![XAMPP](https://img.shields.io/badge/XAMPP-FB7A24?style=flat-square&logo=xampp&logoColor=white) |
 
+</div>
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Installation
 
 ### Prerequisites
 
-- PHP >= 7.4
-- MySQL >= 5.7
-- A local server environment (e.g. [XAMPP](https://www.apachefriends.org/) or [Laragon](https://laragon.org/))
+> Make sure you have the following installed before getting started.
 
-### Steps
+- ![PHP](https://img.shields.io/badge/PHP-%3E%3D7.4-777BB4?style=flat-square&logo=php&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-%3E%3D5.7-4479A1?style=flat-square&logo=mysql&logoColor=white)
+- ![XAMPP](https://img.shields.io/badge/XAMPP_or_Laragon-FB7A24?style=flat-square&logo=xampp&logoColor=white)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/website-store-marketplace.git
-   ```
+### Setup Steps
 
-2. **Move to your server's root directory**
-   ```bash
-   # Example for XAMPP
-   mv website-store-marketplace/ /xampp/htdocs/
-   ```
+**1. Clone the repository**
+```bash
+git clone https://github.com/your-username/website-store-marketplace.git
+```
 
-3. **Import the database**
-   - Open `phpMyAdmin`
-   - Create a new database named `marketplace_db`
-   - Import the file `database/marketplace_db.sql`
+**2. Move to your local server directory**
+```bash
+# For XAMPP users
+mv website-store-marketplace/ /xampp/htdocs/
+```
 
-4. **Configure the database connection**
-   ```php
-   // config/db.php
-   $host     = 'localhost';
-   $db_name  = 'marketplace_db';
-   $username = 'root';
-   $password = '';
-   ```
+**3. Import the database**
+```
+- Open phpMyAdmin
+- Create a new database → marketplace_db
+- Import file: database/marketplace_db.sql
+```
 
-5. **Run the application**
-   Open your browser and navigate to:
-   ```
-   http://localhost/website-store-marketplace/
-   ```
+**4. Configure the database connection**
+```php
+// config/db.php
+$host     = 'localhost';
+$db_name  = 'marketplace_db';
+$username = 'root';
+$password = '';
+```
+
+**5. Launch the app** 🚀
+```
+http://localhost/website-store-marketplace/
+```
 
 ---
 
 ## 👥 User Roles
 
-```
-┌─────────────┬────────────────────────────────────────────────────┐
-│    Role     │ Permissions                                        │
-├─────────────┼────────────────────────────────────────────────────┤
-│  👤 Buyer   │ Browse products, search, manage cart, checkout     │
-│  🏪 Seller  │ Manage own store, add/edit/delete products         │
-│  🛡️ Admin   │ Manage all sellers, suspend/activate accounts      │
-└─────────────┴────────────────────────────────────────────────────┘
-```
+<div align="center">
 
----
+| Role | Access Level | Capabilities |
+|:---:|:---:|---|
+| 👤 **Buyer** | Public | Browse products, search, add to cart, checkout |
+| 🏪 **Seller** | Authenticated | Manage store, add / edit / delete products |
+| 🛡️ **Admin** | Super | Monitor sellers, activate or suspend accounts |
 
-## 🤝 Contributing
+</div>
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork this repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m "feat: add your feature"`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+Distributed under the [MIT License](LICENSE). See `LICENSE` for more information.
 
 ---
 
-<p align="center">Made with ❤️ by <strong>Your Name</strong></p>
+<div align="center">
+
+Made with ❤️ by **Your Name**
+
+⭐ Star this repo if you find it helpful!
+
+</div>
