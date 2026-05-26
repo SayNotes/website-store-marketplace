@@ -20,6 +20,14 @@ $query_produk = "SELECT p.*, k.nama_kategori
                  WHERE p.id_penjual = $id_penjual 
                  ORDER BY p.id_produk DESC";
 $produk = mysqli_query($conn, $query_produk);
+
+// 4. QUERY AMBIL RIWAYAT TRANSAKSI (Baru ditambahkan)
+$query_transaksi = "SELECT t.*, p.nama_produk, p.foto 
+                    FROM transaksi t
+                    JOIN produk p ON t.id_produk = p.id_produk
+                    WHERE t.id_penjual = $id_penjual
+                    ORDER BY t.tanggal DESC";
+$transaksi = mysqli_query($conn, $query_transaksi);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -42,6 +50,9 @@ $produk = mysqli_query($conn, $query_produk);
             max-width: 1140px;
             margin: 40px auto;
             padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Jarak antar card */
         }
 
         .glass-card {
@@ -126,6 +137,17 @@ $produk = mysqli_query($conn, $query_produk);
         .link-edit:hover { color: #60a5fa; }
         .link-hapus { color: #ef4444; }
         .link-hapus:hover { color: #f87171; }
+
+        /* Badge Status Transaksi */
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-selesai { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+        .status-pending { background: rgba(234, 179, 8, 0.1); color: #facc15; }
+        .status-dibatalkan { background: rgba(239, 68, 68, 0.1); color: #f87171; }
     </style>
 </head>
 <body>
@@ -141,6 +163,7 @@ $produk = mysqli_query($conn, $query_produk);
     </header>
 
     <div class="dashboard-wrapper">
+        
         <div class="glass-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <div>
@@ -168,7 +191,6 @@ $produk = mysqli_query($conn, $query_produk);
                             <td>
                                 <div style="display: flex; align-items: center; gap: 16px;">
                                     <?php 
-                                        // Validasi jika gambar ada di database dan fisik filenya tersedia
                                         $gambar_path = "../assets/img/" . $row['foto'];
                                         $foto_produk = (!empty($row['foto']) && file_exists($gambar_path)) ? $gambar_path : "../assets/img/default-product.png";
                                     ?>
@@ -201,6 +223,70 @@ $produk = mysqli_query($conn, $query_produk);
                 </tbody>
             </table>
         </div>
+
+        <div class="glass-card">
+            <div>
+                <h2 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700;">Riwayat Penjualan</h2>
+                <p style="margin: 0; color: #9ca3af; font-size: 14px;">Pantau data transaksi masuk untuk produk-produk digital Anda.</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Tanggal</th>
+                        <th style="width: 35%;">Produk Terjual</th>
+                        <th style="width: 20%;">Pembeli</th>
+                        <th style="width: 15%;">Total Pendapatan</th>
+                        <th style="width: 15%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if(mysqli_num_rows($transaksi) > 0): ?>
+                        <?php while($trx = mysqli_fetch_assoc($transaksi)): ?>
+                        <tr>
+                            <td style="font-size: 13px; color: #9ca3af;">
+                                <?php echo date('d M Y, H:i', strtotime($trx['tanggal'])); ?>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <?php 
+                                        $gambar_trx_path = "../assets/img/" . $trx['foto'];
+                                        $foto_trx = (!empty($trx['foto']) && file_exists($gambar_trx_path)) ? $gambar_trx_path : "../assets/img/default-product.png";
+                                    ?>
+                                    <img src="<?php echo $foto_trx; ?>" style="width: 35px; height: 35px; border-radius: 6px; object-fit: cover;">
+                                    <div>
+                                        <div style="font-weight: 600; color: #ffffff; font-size: 14px;"><?php echo htmlspecialchars($trx['nama_produk']); ?></div>
+                                        <span style="font-size: 12px; color: #9ca3af;">Qty: <?php echo $trx['jumlah']; ?></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span style="font-weight: 500;"><?php echo htmlspecialchars($trx['nama_pembeli']); ?></span>
+                            </td>
+                            <td style="font-weight: 600; color: #22c55e;">
+                                Rp <?php echo number_format($trx['total_harga'], 0, ',', '.'); ?>
+                            </td>
+                            <td>
+                                <?php 
+                                    $status_class = 'status-' . strtolower($trx['status']);
+                                ?>
+                                <span class="badge-status <?php echo $status_class; ?>">
+                                    <?php echo $trx['status']; ?>
+                                </span>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #6b7280; padding: 40px 0;">
+                                💸 Belum ada transaksi masuk untuk toko Anda.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
 </body>

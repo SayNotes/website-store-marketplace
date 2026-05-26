@@ -20,7 +20,7 @@ if ($result_carousel && mysqli_num_rows($result_carousel) > 0) {
 }
 
 // --- AMBIL DATA KATEGORI ---
-$query_kategori = "SELECT * FROM kategori ORDER BY nama_kategori ASC"; // Sesuaikan nama tabel & kolom jika berbeda
+$query_kategori = "SELECT * FROM kategori ORDER BY nama_kategori ASC"; 
 $result_kategori = mysqli_query($conn, $query_kategori);
 
 // --- LOGIKA FILTER KATEGORI & AMBIL DATA PRODUK ---
@@ -33,7 +33,7 @@ $query = "SELECT produk.*, penjual.nama_toko
 
 // Jika user memilih kategori tertentu, tambahkan kondisi WHERE
 if (!empty($kategori_terpilih)) {
-    $query .= " AND produk.id_kategori = '$kategori_terpilih'"; // Sesuaikan nama kolom foreign key di tabel produk
+    $query .= " AND produk.id_kategori = '$kategori_terpilih'"; 
 }
 
 $query .= " ORDER BY produk.id_produk DESC";
@@ -49,7 +49,6 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="assets/css/category-style.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
 </head>
 
 <body>
@@ -81,7 +80,7 @@ $result = mysqli_query($conn, $query);
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                     </svg>
-                </a>
+                </button>
 
                 <div class="dropdown">
                     <div class="profile-group">
@@ -113,19 +112,16 @@ $result = mysqli_query($conn, $query);
 
                 <div>
                     <h1 class="hero-title" style="min-height: 90px;">
-                        <span class="white">Murah & Premium</span><br>
+                        <span class="white">Mau Cari Apa?</span><br>
                         <span class="purple-text" id="typing-text"></span><span class="typing-cursor">|</span>
                     </h1>
                     <p class="hero-subtitle">Solusi cepat, kualitas terjamin.</p>
                 </div>
-
             </div>
         </div>
     </div>
 
-
     <section class="container resources-section">
-
         <div class="carousel-box-wrapper">
             <div class="carousel-container">
                 <div class="carousel-slide">
@@ -153,41 +149,27 @@ $result = mysqli_query($conn, $query);
         <div class="category-container"
             style="display: flex !important; gap: 12px !important; overflow-x: auto !important; padding: 15px 0 25px 0 !important; scrollbar-width: none !important;">
 
-            <!-- Tombol Semua -->
-            <a href="index.php" class="category-badge <?php echo empty($kategori_terpilih) ? 'active' : ''; ?>" style="
-              <?php if (empty($kategori_terpilih)): ?>
-                  'active'
-              <?php else: ?>
-                    ''
-              <?php endif; ?>">
+            <a href="index.php" class="category-badge <?php echo empty($kategori_terpilih) ? 'active' : ''; ?>">
                 Semua
             </a>
 
-            <!-- Looping Kategori dari Database -->
             <?php if ($result_kategori && mysqli_num_rows($result_kategori) > 0): ?>
                 <?php while ($kat = mysqli_fetch_assoc($result_kategori)):
                     $is_active = ($kategori_terpilih == $kat['id_kategori']);
                     ?>
                     <a href="index.php?kategori=<?php echo $kat['id_kategori']; ?>"
-                        class="category-badge <?php echo $is_active ? 'active' : ''; ?>" style="
-                      <?php if ($is_active): ?>
-                          'active'
-                      <?php else: ?>
-                          ''
-                      <?php endif; ?>">
+                        class="category-badge <?php echo $is_active ? 'active' : ''; ?>">
                         <?php echo htmlspecialchars($kat['nama_kategori']); ?>
                     </a>
                 <?php endwhile; ?>
             <?php endif; ?>
-
         </div>
+
         <div class="products-grid">
             <?php if (mysqli_num_rows($result) > 0): ?>
                 <?php while ($row = mysqli_fetch_assoc($result)): ?>
-
                     <?php
                     $foto = $row['foto'];
-
                     if (empty($foto)) {
                         preg_match('/\[(.*?)\]/', $row['nama_produk'], $matches);
                         $text = !empty($matches[1]) ? urlencode($matches[1]) : 'Product';
@@ -226,12 +208,11 @@ $result = mysqli_query($conn, $query);
                             </div>
 
                             <button class="btn-cart-minimal"
-                                onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>', <?php echo $row['harga']; ?>)">
+                                onclick="prosesKeranjang(<?php echo $row['id_produk']; ?>, <?php echo $row['id_penjual']; ?>, '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>', <?php echo $row['harga']; ?>)">
                                 + Cart
                             </button>
                         </div>
                     </div>
-
                 <?php endwhile; ?>
             <?php else: ?>
                 <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Belum ada
@@ -283,19 +264,29 @@ $result = mysqli_query($conn, $query);
             input.value = nilaiBaru;
         }
 
-        function prosesKeranjang(id, nama, harga) {
+        // UPDATE: Menerima dan meneruskan id_penjual
+        function prosesKeranjang(id, idPenjual, nama, harga) {
             const qty = parseInt(document.getElementById('qty-' + id).value) || 1;
-            tambahKeKeranjangDenganQty(id, nama, harga, qty);
+            tambahKeKeranjangDenganQty(id, idPenjual, nama, harga, qty);
         }
 
-        function tambahKeKeranjangDenganQty(id, nama, harga, qty) {
+        // UPDATE: Menyimpan struktur data lengkap ke localStorage (id_produk, id_penjual, nama, harga, jumlah)
+        function tambahKeKeranjangDenganQty(id, idPenjual, nama, harga, qty) {
             let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
-            let itemIndex = keranjang.findIndex(item => item.nama === nama);
+            
+            // Pencarian indeks diganti menggunakan id_produk agar lebih akurat dibanding nama string
+            let itemIndex = keranjang.findIndex(item => item.id_produk === id);
 
             if (itemIndex > -1) {
                 keranjang[itemIndex].jumlah += qty;
             } else {
-                keranjang.push({ nama: nama, harga: harga, jumlah: qty });
+                keranjang.push({ 
+                    id_produk: id, 
+                    id_penjual: idPenjual, 
+                    nama: nama, 
+                    harga: harga, 
+                    jumlah: qty 
+                });
             }
 
             localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
@@ -303,7 +294,7 @@ $result = mysqli_query($conn, $query);
         }
 
         // --- TYPEWRITER EFFECT ---
-        const kataKata = ["Marketplace Digital", "UI Kit Terbaik", "Template Premium", "Source Code Bersih"];
+        const kataKata = ["Marketplace Digital", "Cari Cepat tanpa Ribet", "Kualitas Premium", "Mudah & Terpercaya"];
         let indeksKata = 0;
         let indeksKarakter = 0;
         let sedangMenghapus = false;

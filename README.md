@@ -140,8 +140,4 @@ Distributed under the [MIT License](LICENSE). See `LICENSE` for more information
 
 <div align="center">
 
-Made with ❤️ by **Your Name**
-
-⭐ Star this repo if you find it helpful!
-
 </div>

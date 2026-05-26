@@ -51,7 +51,16 @@ if (isset($_GET['delete'])) {
     exit;
 }
 
+// AMBIL DATA PENJUAL
 $penjual = mysqli_query($conn, "SELECT * FROM penjual ORDER BY id_penjual DESC");
+
+// AMBIL SEMUA DATA TRANSAKSI UTK ADMIN (BARU)
+$query_all_transaksi = "SELECT t.*, p.nama_produk, p.foto, j.nama_toko 
+                        FROM transaksi t
+                        JOIN produk p ON t.id_produk = p.id_produk
+                        JOIN penjual j ON t.id_penjual = j.id_penjual
+                        ORDER BY t.tanggal DESC";
+$all_transaksi = mysqli_query($conn, $query_all_transaksi);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -61,20 +70,37 @@ $penjual = mysqli_query($conn, "SELECT * FROM penjual ORDER BY id_penjual DESC")
     <title>Dashboard Admin - Panel Pengawasan</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background: #0d0d0f;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        /* Style Status Badge Transaksi */
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-selesai { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+        .status-pending { background: rgba(234, 179, 8, 0.1); color: #facc15; }
+        .status-dibatalkan { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+    </style>
 </head>
 <body>
 
-    <div class="admin-panel-container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <div class="admin-panel-container" style="max-width: 1200px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 40px;">
         
-        <div class="admin-title-zone" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div class="admin-title-zone" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h2 style="font-size: 26px; font-weight: 700; margin: 0;">Panel Pengawasan <span style="color:#a855f7;">Admin</span></h2>
-                <p style="color: #64748b; margin: 5px 0 0 0;">Kelola data kemitraan toko dan banner promosi aplikasi</p>
+                <p style="color: #64748b; margin: 5px 0 0 0;">Kelola data kemitraan toko, banner promosi, dan pantau transaksi global</p>
             </div>
             <a href="logout.php" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600;">Keluar Log</a>
         </div>
 
-        <div style="background: rgba(19, 19, 22, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 20px; margin-bottom: 40px;">
+        <div style="background: rgba(19, 19, 22, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); padding: 25px; border-radius: 20px;">
             <h3 style="margin-top: 0; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">🖼️ Manajemen Banner Carousel</h3>
             
             <form action="" method="POST" enctype="multipart/form-data" style="display: flex; gap: 15px; align-items: flex-end; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.04);">
@@ -109,52 +135,118 @@ $penjual = mysqli_query($conn, "SELECT * FROM penjual ORDER BY id_penjual DESC")
             </div>
         </div>
 
-        <div class="table-container" style="background: rgba(19, 19, 22, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px; overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                <thead>
-                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; font-size: 13px;">
-                        <th style="padding: 14px;">Nama Toko</th>
-                        <th style="padding: 14px;">Email Akun</th>
-                        <th style="padding: 14px;">Status Berjalan</th>
-                        <th style="padding: 14px; text-align: right;">Aksi Kontrol</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (mysqli_num_rows($penjual) > 0): ?>
-                        <?php while ($row = mysqli_fetch_assoc($penjual)): ?>
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px; transition: 0.2s;">
-                            <td style="padding: 16px; font-weight: 600;"><?php echo htmlspecialchars($row['nama_toko']); ?></td>
-                            <td style="padding: 16px; color: #cbd5e1;"><?php echo htmlspecialchars($row['email']); ?></td>
-                            <td style="padding: 16px;">
-                                <?php if ($row['status'] == 'aktif'): ?>
-                                    <span style="background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;">Aktif</span>
-                                <?php else: ?>
-                                    <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;">Ditangguhkan</span>
-                                <?php endif; ?>
-                            </td>
-                            <td style="padding: 16px; text-align: right;" class="action-links">
-                                <?php if ($row['status'] == 'aktif'): ?>
-                                    <a href="dashboard.php?action=suspend&id=<?php echo $row['id_penjual']; ?>" onclick="return confirm('Tangguhkan hak akses penjual ini?')" style="color: #fbbf24; text-decoration: none; margin-right: 15px; font-size: 13px; font-weight: 600;">Suspend</a>
-                                <?php else: ?>
-                                    <a href="dashboard.php?action=activate&id=<?php echo $row['id_penjual']; ?>" style="color: #4ade80; text-decoration: none; margin-right: 15px; font-size: 13px; font-weight: 600;">Aktifkan</a>
-                                <?php endif; ?>
-                                
-                                <a href="dashboard.php?delete=<?php echo $row['id_penjual']; ?>" 
-                                   onclick="return confirm('Hapus penjual ini? Semua produk yang berafiliasi dengan mereka juga akan terhapus secara permanen.')" 
-                                   style="color: #f87171; text-decoration: none; font-size: 13px; font-weight: 600;">
-                                    Hapus
-                                </a>
-                            </td>
+        <div style="background: rgba(19, 19, 22, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px;">
+            <h3 style="margin-top: 0; font-size: 18px; margin-bottom: 15px;">🏪 Manajemen Kemitraan Penjual</h3>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; font-size: 13px;">
+                            <th style="padding: 14px;">Nama Toko</th>
+                            <th style="padding: 14px;">Email Akun</th>
+                            <th style="padding: 14px;">Status Berjalan</th>
+                            <th style="padding: 14px; text-align: right;">Aksi Kontrol</th>
                         </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="4" style="text-align: center; color: #64748b; padding: 40px 0;">Belum ada data penjual yang terdaftar di database.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php if (mysqli_num_rows($penjual) > 0): ?>
+                            <?php while ($row = mysqli_fetch_assoc($penjual)): ?>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px; transition: 0.2s;">
+                                <td style="padding: 16px; font-weight: 600;"><?php echo htmlspecialchars($row['nama_toko']); ?></td>
+                                <td style="padding: 16px; color: #cbd5e1;"><?php echo htmlspecialchars($row['email']); ?></td>
+                                <td style="padding: 16px;">
+                                    <?php if ($row['status'] == 'aktif'): ?>
+                                        <span style="background: rgba(34, 197, 94, 0.1); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;">Aktif</span>
+                                    <?php else: ?>
+                                        <span style="background: rgba(239, 68, 68, 0.1); color: #f87171; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500;">Ditangguhkan</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td style="padding: 16px; text-align: right;" class="action-links">
+                                    <?php if ($row['status'] == 'aktif'): ?>
+                                        <a href="dashboard.php?action=suspend&id=<?php echo $row['id_penjual']; ?>" onclick="return confirm('Tangguhkan hak akses penjual ini?')" style="color: #fbbf24; text-decoration: none; margin-right: 15px; font-size: 13px; font-weight: 600;">Suspend</a>
+                                    <?php else: ?>
+                                        <a href="dashboard.php?action=activate&id=<?php echo $row['id_penjual']; ?>" style="color: #4ade80; text-decoration: none; margin-right: 15px; font-size: 13px; font-weight: 600;">Aktifkan</a>
+                                    <?php endif; ?>
+                                    
+                                    <a href="dashboard.php?delete=<?php echo $row['id_penjual']; ?>" 
+                                       onclick="return confirm('Hapus penjual ini? Semua produk yang berafiliasi dengan mereka juga akan terhapus secara permanen.')" 
+                                       style="color: #f87171; text-decoration: none; font-size: 13px; font-weight: 600;">
+                                        Hapus
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #64748b; padding: 40px 0;">Belum ada data penjual yang terdaftar di database.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <div style="background: rgba(19, 19, 22, 0.75); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px;">
+            <h3 style="margin-top: 0; font-size: 18px; margin-bottom: 5px;">💸 Pemantauan Transaksi Global</h3>
+            <p style="color: #64748b; margin: 0 0 20px 0; font-size: 14px;">Catatan riwayat transaksi menyeluruh dari seluruh ekosistem merchant/toko.</p>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); color: #64748b; font-size: 13px;">
+                            <th style="padding: 14px;">Waktu Transaksi</th>
+                            <th style="padding: 14px;">Asal Toko</th>
+                            <th style="padding: 14px;">Aset / Produk</th>
+                            <th style="padding: 14px;">Nama Pembeli</th>
+                            <th style="padding: 14px;">Nilai Transaksi</th>
+                            <th style="padding: 14px;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (mysqli_num_rows($all_transaksi) > 0): ?>
+                            <?php while ($trx = mysqli_fetch_assoc($all_transaksi)): ?>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 14px;">
+                                <td style="padding: 16px; color: #94a3b8; font-size: 13px;">
+                                    <?php echo date('d M Y, H:i', strtotime($trx['tanggal'])); ?>
+                                </td>
+                                <td style="padding: 16px; font-weight: 500; color: #a855f7;">
+                                    <?php echo htmlspecialchars($trx['nama_toko']); ?>
+                                </td>
+                                <td style="padding: 16px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <?php 
+                                            $img_path = "../assets/img/" . $trx['foto'];
+                                            $src_img = (!empty($trx['foto']) && file_exists($img_path)) ? $img_path : "../assets/img/default-product.png";
+                                        ?>
+                                        <img src="<?php echo $src_img; ?>" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover;">
+                                        <div>
+                                            <div style="font-weight: 600;"><?php echo htmlspecialchars($trx['nama_produk']); ?></div>
+                                            <span style="font-size: 11px; color: #64748b;">Jumlah: <?php echo $trx['jumlah']; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="padding: 16px; color: #cbd5e1;">
+                                    <?php echo htmlspecialchars($trx['nama_pembeli']); ?>
+                                </td>
+                                <td style="padding: 16px; font-weight: 600; color: #22c55e;">
+                                    Rp <?php echo number_format($trx['total_harga'], 0, ',', '.'); ?>
+                                </td>
+                                <td style="padding: 16px;">
+                                    <span class="badge-status status-<?php echo strtolower($trx['status']); ?>">
+                                        <?php echo $trx['status']; ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #64748b; padding: 40px 0;">Belum ada aktivitas transaksi yang terekam pada sistem.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>

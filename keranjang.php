@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keranjang Belanja - Inspired Market</title>
+    <title>Keranjang Belanja</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
@@ -27,10 +27,8 @@
         <h2 class="section-title">Keranjang Belanja Anda</h2>
 
         <div class="cart-layout">
-            <!-- Daftar Item -->
             <div class="cart-items-wrapper" id="cart-container"></div>
 
-            <!-- Ringkasan -->
             <div class="cart-summary">
                 <h3>Ringkasan Belanja</h3>
                 <div class="cart-summary-row">
@@ -47,10 +45,12 @@
     </main>
 
     <script>
+        // Fungsi helper untuk mengubah angka menjadi format mata uang Rupiah
         function formatRupiah(angka) {
             return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        // Fungsi untuk mengambil data dari localStorage dan merendernya ke HTML
         function renderKeranjang() {
             const cartContainer = document.getElementById('cart-container');
             const totalQtyEl    = document.getElementById('total-qty');
@@ -104,6 +104,7 @@
             totalPriceEl.innerText = formatRupiah(totalHarga);
         }
 
+        // Fungsi mengubah jumlah barang (+ atau -)
         function updateJumlah(index, arah) {
             let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
             keranjang[index].jumlah = Math.max(1, keranjang[index].jumlah + arah);
@@ -111,17 +112,50 @@
             renderKeranjang();
         }
 
+        // Fungsi menghapus item dari keranjang
         function hapusItem(index) {
-            let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
-            keranjang.splice(index, 1);
-            localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
-            renderKeranjang();
+            if(confirm('Hapus item ini dari keranjang?')) {
+                let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
+                keranjang.splice(index, 1);
+                localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
+                renderKeranjang();
+            }
         }
 
+        // FUNGSI UTAMA: Mengirimkan array objek dari localStorage ke PHP Backend via Fetch API
         function prosesCheckout() {
-            alert('🚀 Fitur checkout terintegrasi! Data keranjang siap dikirim ke backend.');
+            let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
+            
+            if (keranjang.length === 0) {
+                alert('❌ Keranjang belanja Anda masih kosong!');
+                return;
+            }
+
+            // Kirim data ke file aksi checkout menggunakan metode POST JSON
+            fetch('checkout_aksi.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(keranjang)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('🎉 Pembayaran Berhasil! Aset digital Anda sukses dicatat.');
+                    localStorage.removeItem('mp_purple_cart'); // Bersihkan isi keranjang belanja di browser
+                    window.location.href = 'index.php'; // Alihkan kembali ke halaman utama
+                } else {
+                    alert('❌ Gagal memproses transaksi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('⚠️ Terjadi gangguan koneksi atau kegagalan sistem pada server.');
+            });
         }
 
+        // Jalankan render saat halaman pertama kali dimuat
         document.addEventListener("DOMContentLoaded", () => {
             renderKeranjang();
             if (window.gsap) {

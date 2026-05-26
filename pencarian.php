@@ -29,7 +29,7 @@ $result = mysqli_query($conn, $query);
     <header>
         <div class="container navbar-container">
             <div class="logo" onclick="window.location.href='index.php'">
-                <span class="white">Market</span><span class="purple">Inspired</span>
+                <span class="white">Hamba</span><span class="purple">Market</span>
             </div>
 
             <form action="pencarian.php" method="GET" class="search-box">
