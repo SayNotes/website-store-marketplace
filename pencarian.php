@@ -3,6 +3,7 @@ include 'config/database.php';
 
 $keyword = isset($_GET['query']) ? mysqli_real_escape_string($conn, $_GET['query']) : '';
 
+// Query tetap aman karena produk.* otomatis menarik id_penjual dari tabel produk
 $query = "SELECT produk.*, penjual.nama_toko 
           FROM produk 
           JOIN penjual ON produk.id_penjual = penjual.id_penjual 
@@ -84,6 +85,11 @@ $result = mysqli_query($conn, $query);
                     } else {
                         $image_url = (strpos($foto, 'http://') === 0 || strpos($foto, 'https://') === 0) ? $foto : 'assets/img/' . $foto;
                     }
+
+                    // Jika background style kosong karena file tidak ada di direktori lokal, pakai image_url default
+                    if (empty($bgStyle)) {
+                        $bgStyle = "background-image: url('{$image_url}');";
+                    }
                     ?>
 
                     <div class="sleek-card">
@@ -113,9 +119,11 @@ $result = mysqli_query($conn, $query);
                                 <button type="button" class="count-btn"
                                     onclick="ubahAngka(this, 1, <?php echo $row['stok']; ?>)">+</button>
                             </div>
+                            
                             <button class="btn-cart-minimal"
                                 onclick="prosesKeranjang(
                                     <?php echo $row['id_produk']; ?>,
+                                    <?php echo $row['id_penjual']; ?>,
                                     '<?php echo htmlspecialchars($row['nama_produk'], ENT_QUOTES); ?>',
                                     <?php echo $row['harga']; ?>)">
                                 + Cart
@@ -140,14 +148,28 @@ $result = mysqli_query($conn, $query);
             input.value = val;
         }
 
-        function prosesKeranjang(id, nama, harga) {
+        // UPDATE: Logika diubah agar menghasilkan struktur object data localStorage yang sama persis dengan index.php
+        function prosesKeranjang(id, idPenjual, nama, harga) {
             const qty = parseInt(document.getElementById('qty-' + id).value) || 1;
             let keranjang = JSON.parse(localStorage.getItem('mp_purple_cart')) || [];
-            let item = keranjang.find(i => i.id === id);
-            if (item) { item.jumlah += qty; }
-            else       { keranjang.push({ id, nama, harga, jumlah: qty }); }
+            
+            // Pencarian data menggunakan id_produk (bukan .id lagi)
+            let itemIndex = keranjang.findIndex(item => item.id_produk === id);
+
+            if (itemIndex > -1) {
+                keranjang[itemIndex].jumlah += qty;
+            } else {
+                keranjang.push({ 
+                    id_produk: id, 
+                    id_penjual: idPenjual, 
+                    nama: nama, 
+                    harga: harga, 
+                    jumlah: qty 
+                });
+            }
+
             localStorage.setItem('mp_purple_cart', JSON.stringify(keranjang));
-            alert(`⚡ Sukses! ${qty} item "${nama}" berhasil dimasukkan ke keranjang.`);
+            alert(`🎉 Berhasil memasukkan ${qty} pcs "${nama}" ke keranjang belanja!`);
         }
 
         document.addEventListener("DOMContentLoaded", () => {
