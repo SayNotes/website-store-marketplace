@@ -94,7 +94,7 @@ $all_transaksi = mysqli_query($conn, $query_all_transaksi);
         
         <div class="admin-title-zone" style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h2 style="font-size: 26px; font-weight: 700; margin: 0;">Panel Pengawasan <span style="color:#a855f7;">Admin</span></h2>
+                <h2 style="font-size: 26px; font-weight: 700; margin: 0;">Panel Pengawasan <span style="color:#a855f7;">Admin Loh Ya😹</span></h2>
                 <p style="color: #64748b; margin: 5px 0 0 0;">Kelola data kemitraan toko, banner promosi, dan pantau transaksi global</p>
             </div>
             <a href="logout.php" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600;">Keluar Log</a>
