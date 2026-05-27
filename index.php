@@ -181,7 +181,7 @@ $result = mysqli_query($conn, $query);
 
                     <div class="sleek-card-index">
                         <div>
-                            <div class="preview-wrapper" style="background-image: url('<?php echo $image_url; ?>'); aspect-ratio: 1 / 1; background-size: cover; background-position: center; border-radius: 8px;">
+                            <div class="preview-wrapper" style="background-image: url('<?php echo $image_url; ?>'); width: 100% !important; height: 0 !important; padding-bottom: 100% !important; background-size: cover !important; background-position: center !important; border-radius: 8px; position: relative !important;">
                                 <div class="floating-price">
                                     <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>

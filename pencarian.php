@@ -94,7 +94,7 @@ $result = mysqli_query($conn, $query);
 
                     <div class="sleek-card">
                         <div>
-                            <div class="preview-wrapper" style="<?php echo $bgStyle; ?>">
+                            <div class="preview-wrapper" style="<?php echo $bgStyle; ?> width: 100% !important; height: 0 !important; padding-bottom: 100% !important; background-size: cover !important; background-position: center !important; border-radius: 8px; position: relative !important;">
                                 <div class="floating-price">
                                     <img src="assets/img/coin.png" alt="coin" class="money-icon">
                                     Rp <?php echo number_format($row['harga'], 0, ',', '.'); ?>
