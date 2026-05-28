@@ -68,6 +68,7 @@ $all_transaksi = mysqli_query($conn, $query_all_transaksi);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - Panel Pengawasan</title>
+    <link rel="icon" type="image/png" href="assets/img/coin.png">
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
