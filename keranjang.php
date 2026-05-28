@@ -15,7 +15,7 @@
     <header>
         <div class="container navbar-container">
             <div class="logo" onclick="window.location.href='index.php'">
-                <span class="white">Market</span><span class="purple">Inspired</span>
+                <span class="white">Hamba</span><span class="purple">Market</span>
             </div>
             <div class="nav-actions">
                 <a href="index.php" class="nav-link">← Kembali Belanja</a>
