@@ -163,7 +163,7 @@ $transaksi = mysqli_query($conn, $query_transaksi);
 
     <header>
         <div class="logo" style="font-size: 22px; font-weight:700;">
-            <span style="color:#fff;">Seller</span><span style="color:#a855f7;">Panel*</span>
+            <span style="color:#fff;">Hamba</span><span style="color:#a855f7;">Seller</span>
         </div>
         <div style="display: flex; align-items: center; gap: 24px;">
             <span style="font-size: 14px; color: #9ca3af;">Mitra: <strong style="color: #fff;"><?php echo htmlspecialchars($nama_toko); ?></strong></span>
