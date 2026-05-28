@@ -66,7 +66,7 @@ if (isset($_POST['update_produk'])) {
     <meta charset="UTF-8">
     <title>Edit Aset Digital - SellerPanel</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="icon" type="image/png" href="assets/img/coin.png">
+    <link rel="icon" type="image/png" href="../assets/img/coin.png">
     <style>
         body {
             background: #0d0d0f;

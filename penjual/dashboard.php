@@ -35,7 +35,7 @@ $transaksi = mysqli_query($conn, $query_transaksi);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Toko - <?php echo htmlspecialchars($nama_toko); ?></title>
-    <link rel="icon" type="image/png" href="assets/img/coin.png">
+    <link rel="icon" type="image/png" href="../assets/img/coin.png">
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         body {
