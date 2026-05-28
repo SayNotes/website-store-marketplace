@@ -37,7 +37,6 @@ $transaksi = mysqli_query($conn, $query_transaksi);
     <title>Dashboard Toko - <?php echo htmlspecialchars($nama_toko); ?></title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        /* Penyesuaian tema gelap Glassmorphic agar serasi dengan login.php */
         body {
             background: #0d0d0f;
             color: #ffffff;
@@ -52,7 +51,7 @@ $transaksi = mysqli_query($conn, $query_transaksi);
             padding: 0 24px;
             display: flex;
             flex-direction: column;
-            gap: 40px; /* Jarak antar card */
+            gap: 40px;
         }
 
         .glass-card {
@@ -90,6 +89,17 @@ $transaksi = mysqli_query($conn, $query_transaksi);
             background: #9333ea;
             transform: translateY(-2px);
         }
+
+        /* Notifikasi Alert System */
+        .alert-notif {
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        .alert-sukses { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+        .alert-gagal { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
 
         table {
             width: 100%;
@@ -138,7 +148,6 @@ $transaksi = mysqli_query($conn, $query_transaksi);
         .link-hapus { color: #ef4444; }
         .link-hapus:hover { color: #f87171; }
 
-        /* Badge Status Transaksi */
         .badge-status {
             padding: 4px 10px;
             border-radius: 20px;
@@ -164,6 +173,18 @@ $transaksi = mysqli_query($conn, $query_transaksi);
 
     <div class="dashboard-wrapper">
         
+        <?php if (isset($_GET['msg'])): ?>
+            <?php if ($_GET['msg'] == 'tambah_sukses'): ?>
+                <div class="alert-notif alert-sukses">🎉 Produk baru Anda berhasil ditambahkan ke katalog penjualan!</div>
+            <?php elseif ($_GET['msg'] == 'edit_sukses'): ?>
+                <div class="alert-notif alert-sukses">✏️ Perubahan detail informasi produk Anda telah disimpan.</div>
+            <?php elseif ($_GET['msg'] == 'hapus_sukses'): ?>
+                <div class="alert-notif alert-sukses">🗑️ Produk terpilih berhasil dihapus secara permanen dari toko.</div>
+            <?php elseif ($_GET['msg'] == 'gagal'): ?>
+                <div class="alert-notif alert-gagal">❌ Terjadi kesalahan sistem. Aksi gagal dieksekusi.</div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <div class="glass-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <div>
@@ -267,9 +288,7 @@ $transaksi = mysqli_query($conn, $query_transaksi);
                                 Rp <?php echo number_format($trx['total_harga'], 0, ',', '.'); ?>
                             </td>
                             <td>
-                                <?php 
-                                    $status_class = 'status-' . strtolower($trx['status']);
-                                ?>
+                                <?php $status_class = 'status-' . strtolower($trx['status']); ?>
                                 <span class="badge-status <?php echo $status_class; ?>">
                                     <?php echo $trx['status']; ?>
                                 </span>
