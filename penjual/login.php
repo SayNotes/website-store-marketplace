@@ -238,7 +238,7 @@ if (isset($_POST['login'])) {
         <div style="text-align: center; margin-bottom: 40px;" class="header-logo">
             <div class="logo" style="font-size: 28px; margin-bottom: 8px; cursor: pointer;"
                 onclick="window.location.href='../index.php'">
-                <span class="white">Seller</span><span class="purple">Hub*</span>
+                <span class="white">Hamba</span><span class="purple">Seller</span>
             </div>
             <p style="color: var(--text-muted); font-size: 14px;">Kelola produk digital dan pantau performa penjualan
                 Anda</p>
