@@ -179,7 +179,7 @@ if (isset($_POST['login'])) {
             
             <div class="login-header">
                 <div class="logo" style="font-size: 24px; margin-bottom: 6px; pointer-events: none;">
-                    <span class="white">Market</span><span class="purple">Inspired</span>
+                    <span class="white">Hamba</span><span class="purple">Market</span>
                 </div>
                 <h2>Login Portal</h2>
                 <p>Silakan masuk untuk mengelola sistem marketplace</p>
