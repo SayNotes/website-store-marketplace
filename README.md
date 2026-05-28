@@ -1,7 +1,11 @@
 <div align="center">
 
-
 <br/>
+
+<p>
+  <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" width="32" title="Status Active" />
+  <img src="https://cdn-icons-png.flaticon.com/512/1051/1051275.png" width="32" title="Pull Requests" />
+</p>
 
 <p>
   <img src="https://img.shields.io/badge/Status-Active-4CAF50?style=for-the-badge&logo=checkmarx&logoColor=white" />
@@ -9,6 +13,8 @@
   <img src="https://img.shields.io/badge/License-MIT-FF6B6B?style=for-the-badge&logo=opensourceinitiative&logoColor=white" />
   <img src="https://img.shields.io/badge/PRs-Welcome-00BCD4?style=for-the-badge&logo=github&logoColor=white" />
 </p>
+
+
 
 <p><em>A modern web-based marketplace platform that empowers sellers to build their stores<br/>and enables buyers to discover and purchase products — all in one place.</em></p>
 
@@ -21,6 +27,7 @@
 ---
 
 </div>
+
 
 ## 📌 Overview
 
@@ -85,7 +92,7 @@
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/your-username/website-store-marketplace.git
+git clone https://github.com/SayNotes/website-store-marketplace
 ```
 
 **2. Move to your local server directory**
@@ -128,8 +135,12 @@ http://localhost/website-store-marketplace/
 | 🛡️ **Admin** | Super | Monitor sellers, activate or suspend accounts |
 
 </div>
+---
+<br/>
 
+Made with &nbsp;by &nbsp;**[Sultan Faiz Mochammad](https://github.com/SayNotes) & [Joan Pramudya](https://github.com/pramudyajoan-dev)**
 
+<br/>
 ---
 
 ## 📄 License
